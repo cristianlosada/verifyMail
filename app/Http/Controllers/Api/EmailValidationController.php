@@ -16,8 +16,6 @@ class EmailValidationController extends Controller
         $email = $request->string('email');
 
         $result = $this->service->validate($email);
-        
-        \Log::info($result);
 
         $record = EmailCheck::create([
             'email'    => $email,
