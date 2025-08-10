@@ -16,12 +16,14 @@ class EmailValidationController extends Controller
         $email = $request->string('email');
 
         $result = $this->service->validate($email);
+        
+        \Log::info($result);
 
         $record = EmailCheck::create([
             'email'    => $email,
             'is_valid' => $result['is_valid'],
-            'reason'   => $result['reason'],
-            'meta'     => $result['meta'],
+            'reason'   => $result['reason'] ?? 'unknown',
+            'meta'     => json_encode($result['meta'] ?? []),
         ]);
 
         return response()->json([
@@ -29,7 +31,7 @@ class EmailValidationController extends Controller
             'email'    => $record->email,
             'is_valid' => $record->is_valid,
             'reason'   => $record->reason,
-            'meta'     => $record->meta,
+            'meta'     => $result['meta'] ?? null,
             'checked_at' => $record->created_at,
         ]);
     }
