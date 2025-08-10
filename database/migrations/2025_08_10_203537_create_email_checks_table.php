@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('email_checks', function (Blueprint $table) {
             $table->id();
+            $table->string('email')->index();
+            $table->boolean('is_valid')->default(false);
+            $table->string('reason')->nullable();      // e.g. invalid_format, no_mx, smtp_fail, etc.
+            $table->json('meta')->nullable();          // detalles: dominios MX, tiempos, etc.
             $table->timestamps();
         });
     }
